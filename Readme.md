@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Kirill Mezentsev](https://up.htmlacademy.ru/javascript/29/user/2271259).
-* Наставник: [Павел Лукин] (https://htmlacademy.ru/profile/id1313529).
+* Наставник: [Павел Лукин](https://htmlacademy.ru/profile/id1313529).
 
 ---
 
