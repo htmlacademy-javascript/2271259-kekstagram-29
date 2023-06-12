@@ -1,15 +1,7 @@
+const numberOfCharacters = (sentence, num) => sentence.length <= num;
 
-const numberOfCharacters = function(sentence, num) {
-  if (sentence.length <= num) {
-    return true;
-  } else {
-    return false;
-  }
-};
+numberOfCharacters();
 
+const palindrome = (str) => str === str.split('').reverse().join('').toLowerCase();
 
-const palindrome = function(str) {
-  return str === str.split('').reverse().join('');
-};
-
-
+palindrome();
