@@ -7,9 +7,11 @@ const numberOfCharacters = function(sentence, num) {
   }
 };
 
+numberOfCharacters();
 
 const palindrome = function(str) {
   return str === str.split('').reverse().join('');
 };
 
 
+palindrome();
