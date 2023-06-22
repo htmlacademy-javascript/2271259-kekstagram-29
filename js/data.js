@@ -1,4 +1,4 @@
-import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utl';
+import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utl.js';
 const names = [
   'John',
   'Jack',

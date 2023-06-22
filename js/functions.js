@@ -15,3 +15,12 @@
 
 
 // palindrome();
+
+// const calculateTime = (hour, min) => {
+//   let startHour = hour + ':' + min;
+
+//   return startHour;
+// };
+
+
+// console.log(calculateTime());
