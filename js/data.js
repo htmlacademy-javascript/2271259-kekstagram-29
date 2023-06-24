@@ -1,4 +1,7 @@
-import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utl.js';
+import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utile.js';
+
+const similarPersonCount = 25;
+
 const names = [
   'John',
   'Jack',
@@ -24,8 +27,6 @@ const messages = [
 
 const generatePhotoId = getId(1, 25);
 const generateCommentId = getId(1, 750);
-
-const similarPersonCount = 25;
 
 const generateComments = () => ({
   id: generateCommentId(),
