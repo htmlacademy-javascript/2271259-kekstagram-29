@@ -1,4 +1,6 @@
-import {createSimilarPerson} from './data.js';
+// import {createSimilarPerson} from './data.js';
+import { createPhotos } from './createPhoto.js';
 
-createSimilarPerson();
+// createSimilarPerson();
 
+createPhotos();

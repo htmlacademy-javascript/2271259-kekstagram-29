@@ -47,4 +47,5 @@ const createPerson = () => ({
 
 const createSimilarPerson = () => Array.from({length: similarPersonCount}, createPerson, () => new createPerson());
 
+
 export{createSimilarPerson};
