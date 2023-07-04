@@ -17,6 +17,11 @@ const createPhotos = ({ url, description, likes, comments}) => {
   return pictureElement;
 };
 
+// const renderPictures = (pictures) => {
+//   picturesContainer.querySelectorAll('.picture').forEach((element) => element.remove());
+//   picturesContainer.append(...pictures.map(createPhotos)):
+// };
+
 const displayPhotos = (photos) => picturesContainer.append(...photos.map(createPhotos));
 
 export {displayPhotos};
