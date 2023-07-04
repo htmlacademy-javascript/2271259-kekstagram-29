@@ -1,4 +1,5 @@
-import {createSimilarPerson} from './data.js';
+import { createSimilarPerson } from './data.js';
+import { displayPhotos } from './photos.js';
 
-createSimilarPerson();
-
+const photos = createSimilarPerson();
+displayPhotos(photos);
