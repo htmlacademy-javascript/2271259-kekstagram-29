@@ -1,6 +1,5 @@
-// import {createSimilarPerson} from './data.js';
-import { createPhotos } from './createPhoto.js';
+import { createSimilarPerson } from './data.js';
+import { displayPhotos } from './photos.js';
 
-// createSimilarPerson();
-
-createPhotos();
+const photos = createSimilarPerson();
+displayPhotos(photos);
