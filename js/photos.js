@@ -17,6 +17,10 @@ const createPhotos = ({ url, description, likes, comments}) => {
   return pictureElement;
 };
 
+// const clearPhotos = () => {
+//   pictureTemplate.innerHTML = '';
+// };
+
 // const renderPictures = (pictures) => {
 //   picturesContainer.querySelectorAll('.picture').forEach((element) => element.remove());
 //   picturesContainer.append(...pictures.map(createPhotos)):

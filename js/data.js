@@ -2,7 +2,7 @@ import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utile.j
 
 const similarPersonCount = 25;
 
-const names = [
+export const names = [
   'John',
   'Jack',
   'Maria',
@@ -15,7 +15,7 @@ const names = [
   'Leo'
 ];
 
-const messages = [
+export const messages = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
@@ -48,4 +48,4 @@ const createPerson = () => ({
 const createSimilarPerson = () => Array.from({length: similarPersonCount}, createPerson, () => new createPerson());
 
 
-export{createSimilarPerson};
+export{createSimilarPerson, getRandomPositiveInteger };
