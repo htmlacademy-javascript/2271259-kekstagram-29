@@ -1,31 +1,28 @@
-const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const createPhotos = ({ url, description, likes, comments}) => {
+const createPhotos = ({ url, description, likes, comments, id}) => {
 
   const pictureElement = pictureTemplate.cloneNode(true);
 
-  const image = pictureElement.querySelector('.picture__img');
-  image.src = url;
-  image.alt = description;
-
-  pictureElement.querySelector('.picture__likes').textContent = likes;
+  pictureElement.querySelector('.picture__img').src = url;
+  pictureElement.querySelector('.picture__img').alt = description;
   pictureElement.querySelector('.picture__comments').textContent = comments.length;
+  pictureElement.querySelector('.picture__likes').textContent = likes;
+  pictureElement.dataset.thumbnailId = id;
 
   return pictureElement;
 };
 
-// const clearPhotos = () => {
-//   pictureTemplate.innerHTML = '';
-// };
+const renderPictures = (pictures, container) => {
+  const fragment = document.createDocumentFragment();
+  pictures.forEach((picture) => {
+    const thumbnail = createPhotos(picture);
+    fragment.append(thumbnail);
+  });
 
-// const renderPictures = (pictures) => {
-//   picturesContainer.querySelectorAll('.picture').forEach((element) => element.remove());
-//   picturesContainer.append(...pictures.map(createPhotos)):
-// };
+  container.append(fragment);
+};
 
-const displayPhotos = (photos) => picturesContainer.append(...photos.map(createPhotos));
-
-export {displayPhotos};
+export {renderPictures};
