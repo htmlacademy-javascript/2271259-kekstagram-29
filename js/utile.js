@@ -5,7 +5,8 @@ const getRandomPositiveInteger = (a, b) => {
   return Math.floor(result);
 };
 
-const getRandomArrayElement = (elements) => (elements[getRandomPositiveInteger(0, elements.length - 1)]);
+const getRandomArrayElement = (elements) =>
+  elements[getRandomPositiveInteger(0, elements.length - 1)];
 
 const getId = () => {
   let index = 0;
@@ -15,6 +16,6 @@ const getId = () => {
   };
 };
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const isEscapeKey = (evt) => evt.key === "Escape";
 
-export {getRandomPositiveInteger, getRandomArrayElement, getId, isEscapeKey};
+export { getRandomPositiveInteger, getRandomArrayElement, getId, isEscapeKey };
