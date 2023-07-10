@@ -1,5 +1,7 @@
 import { createSimilarPerson } from './data.js';
-import { displayPhotos } from './photos.js';
+
+import { renderGallery } from './gallery.js';
 
 const photos = createSimilarPerson();
-displayPhotos(photos);
+
+renderGallery(photos);
