@@ -15,5 +15,5 @@ const getId = () => {
   };
 };
 
-const isEscapeKey = (evt) => evt.key === "Escape";
+const isEscapeKey = (evt) => evt.key === 'Escape';
 export {getRandomPositiveInteger, getRandomArrayElement, getId, isEscapeKey};
