@@ -1,4 +1,4 @@
-import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utils.js';
+import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utile.js';
 
 const similarPersonCount = 25;
 
