@@ -1,4 +1,3 @@
-
 const bigPicture = document.querySelector('.big-picture');
 const modulePicture = bigPicture.querySelector('.big-picture__img img');
 const closeModal = bigPicture.querySelector('.big-picture__cancel');
