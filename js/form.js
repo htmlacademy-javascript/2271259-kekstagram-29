@@ -8,11 +8,9 @@ const buttonToCloseModal = form.querySelector('.img-upload__cancel');
 
 const makeformValidation = formValidation(form);
 
-const onInputToUploadFile = () => {
-  openFormModal();
-};
+const onInputToUploadFile = openFormModal;
 
-const onButtonToCloseModalClick = () => closeFormModal();
+const onButtonToCloseModalClick = onCloseFormModal;
 
 const onFormSubmit = (evt) => {
   const isValidForm = makeformValidation.validate();
@@ -27,22 +25,21 @@ const onFormSubmit = (evt) => {
 const formReset = () => {
   form.reset();
   makeformValidation.reset();
-
 };
 
-function closeFormModal() {
+function onCloseFormModal() {
   document.body.classList.remove('modal-open');
   formModal.classList.add('hidden');
 
   formReset();
 
-  document.removeEventListener('keydown', closeFormModal);
+  document.removeEventListener('keydown', onCloseFormModal);
 }
 
 function openFormModal() {
   document.body.classList.add('modal-open');
   formModal.classList.remove('hidden');
-  document.addEventListener('keydown', closeFormModal);
+  document.addEventListener('keydown', onCloseFormModal);
 }
 
 const initiateForm = () => {

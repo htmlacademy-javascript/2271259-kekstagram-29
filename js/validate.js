@@ -1,10 +1,29 @@
 const hashtagsSymbols = /^#[a-zа-яё0-9]{1,19}$/i;
 const hashtagsMin = 5;
 const hashtagsMax = 140;
-const hastagMaxError = () => 'Слишком много хэштегов !';
+const hashtagMaxError = () => 'Слишком много хэштегов !';
 const hashtagUniquenessError = () => 'Два одинаковых хэштэга!';
 const hashtagSymbolsError = () => 'Невалидный хэштег !';
 const textError = () => 'Комментарий больше 140 символов !';
+
+const validateHashtag = (value) => value.split(/\s+/).length <= hashtagsMin;
+const validateTextarea = (value) => value.length <= hashtagsMax;
+
+const validateHashtagSymbols = (value) => {
+  const hashtags = value.split(/\s+/);
+  return !value.length || hashtags.every((hashtag) => hashtagsSymbols.test(hashtag));
+};
+
+const hashtagsKeydown = (evt) => evt.stopPropagation();
+const textareaKeydown = (evt) => evt.stopPropagation();
+
+const validateUniqueness = (value) => {
+  const hashtags = value.toLowerCase()
+    .split(/\s+/)
+    .map((hashtag) => hashtag.toLowerCase());
+
+  return hashtags.length === new Set(hashtags).size;
+};
 
 const formValidation = (form) => {
   const inputHashtags = form.querySelector('.text__hashtags');
@@ -19,32 +38,13 @@ const formValidation = (form) => {
     errorTextClass: 'text__error'
   }, true);
 
-  const validateHashtag = (value) => value.split(' ').length <= hashtagsMin;
-  const validateTextarea = (value) => value.length <= hashtagsMax;
-
-  const validateHashtagSymbols = (value) => {
-    const hashtags = value.split(' ');
-    return !value.length || hashtags.every((hashtag) => hashtagsSymbols.test(hashtag));
-  };
-
-  const validateUniqueness = (value) => {
-    const hashtags = value
-      .split(' ')
-      .map((hashtag) => hashtag.toLowerCase());
-
-    return hashtags.length === new Set(hashtags).size;
-  };
-
-  pristine.addValidator(inputHashtags, validateHashtag, hastagMaxError);
+  pristine.addValidator(inputHashtags, validateHashtag, hashtagMaxError);
   pristine.addValidator(inputHashtags, validateUniqueness, hashtagUniquenessError);
   pristine.addValidator(inputHashtags, validateHashtagSymbols , hashtagSymbolsError);
   pristine.addValidator(textarea, validateTextarea, textError);
 
-  const hashtagsKeydown = (evt) => evt.stopPropagation();
-  const yextareaKeydown = (evt) => evt.stopPropagation();
-
   inputHashtags.addEventListener('keydown', hashtagsKeydown);
-  textarea.addEventListener('keydown', yextareaKeydown);
+  textarea.addEventListener('keydown', textareaKeydown);
 
   return {
     validate: () => pristine.validate(inputHashtags, textarea),
