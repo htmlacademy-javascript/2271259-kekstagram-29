@@ -1,12 +1,12 @@
 import { renderPictures } from './photos.js';
-import { showBigPicture } from './big-module.js';
+import { OpenUserModal } from './big-module.js';
 
 const container = document.querySelector('.pictures');
 
 const renderGallery = (pictures) => {
   container.addEventListener('click', (evt) => {
-    const thumbnail = evt.target.closest ('[data-thumbnail-id]');
-    if(!thumbnail) {
+    const thumbnail = evt.target.closest('[data-thumbnail-id]');
+    if (!thumbnail) {
       return;
     }
 
@@ -15,11 +15,10 @@ const renderGallery = (pictures) => {
       (item) => item.id === +thumbnail.dataset.thumbnailId
     );
 
-    showBigPicture(picture);
-
+    OpenUserModal(picture);
   });
 
   renderPictures(pictures, container);
 };
 
-export {renderGallery};
+export { renderGallery };

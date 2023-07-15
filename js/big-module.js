@@ -11,11 +11,11 @@ const socialAvatar = bigPicture.querySelector('.social__comments');
 // const commentLoader = document.querySelector('.comments-loader');
 // const commentAvatar = socialAvatar.querySelector('.social__picture');
 // const socialText = socialAvatar.querySelector('.social__text');
-const commentTemplate = document.querySelector('#comment')
-  .content
-  .querySelector('.social__comment');
+const commentTemplate = document
+  .querySelector('#comment')
+  .content.querySelector('.social__comment');
 
-const createComment = ({avatar, name, message }) => {
+const createComment = ({ avatar, name, message }) => {
   const comment = commentTemplate.cloneNode(true);
 
   comment.querySelector('.social__picture').src = avatar;
@@ -36,36 +36,47 @@ const renderComments = (comments) => {
   socialAvatar.append(fragment);
 };
 
-const hideBigPicture = () => {
+const hideBigPhoto = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
 };
 
+const closeOpenModal = () => {
+  hideBigPhoto();
+
+  // Delete hidbigphoto
+};
+
 function onDocumentKeydown(evt) {
-  if(evt.key === 'Escape') {
+  if (evt.key === 'Escape') {
     evt.preventDefault();
-    hideBigPicture();
+    closeOpenModal();
   }
 }
 
 const onCancelButtonClick = () => {
-  hideBigPicture();
+  closeOpenModal();
 };
 
-const renderPictureDetails = ({url, likes, description}) => {
+const renderPictureDetails = ({ url, likes, description }) => {
   modulePicture.src = url;
   modulePicture.alt = description;
   likesCount.textContent = likes;
   socialCaption.textContent = description;
 };
 
-const showBigPicture = (data) => {
+const openingModal = () => {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+const OpenUserModal = (data) => {
   // commentLoader.classList.add('hidden');
   // commentCount.classList.add('hidden');
-  document.addEventListener('keydown', onDocumentKeydown);
+  openingModal();
+  // delete opening modal
 
   renderPictureDetails(data);
   renderComments(data.comments);
@@ -73,4 +84,4 @@ const showBigPicture = (data) => {
 
 closeModal.addEventListener('click', onCancelButtonClick);
 
-export {showBigPicture};
+export { OpenUserModal };
