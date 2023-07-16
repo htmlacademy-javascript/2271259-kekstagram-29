@@ -1,6 +1,5 @@
 import { formValidation } from './validate.js';
 
-
 const form = document.querySelector('#upload-select-image');
 const inputUploadFile = form.querySelector('#upload-file');
 const formModal = form.querySelector('.img-upload__overlay');
@@ -48,4 +47,4 @@ const initiateForm = () => {
   form.addEventListener('submit', onFormSubmit);
 };
 
-export { initiateForm };
+export { initiateForm, onCloseFormModal };

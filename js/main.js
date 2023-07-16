@@ -1,8 +1,28 @@
-import { createSimilarPerson } from './data.js';
 import { renderGallery } from './gallery.js';
-import { initiateForm } from './form.js';
+import { initiateForm, onCloseFormModal } from './form.js';
+import { getData, sendData } from './server.js';
+import { showErrorMessage, showSuccessMessage } from './message.js';
+import { showAlert } from './utile.js';
 
-const photos = createSimilarPerson();
+// getData()
+//   .then(renderGallery)
+//   .catch(({message}) => showErrorBlock(message));
 
-renderGallery(photos);
-initiateForm();
+// initiateForm();
+
+initiateForm(async (data) => {
+  try {
+    await sendData(data);
+    onCloseFormModal();
+    showSuccessMessage();
+  } catch {
+    showErrorMessage();
+  }
+});
+
+try {
+  const data = await getData();
+  renderGallery(data);
+} catch(err) {
+  showAlert(err.message);
+}
