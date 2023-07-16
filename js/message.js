@@ -49,38 +49,3 @@ const showErrorMessage = () => {
 };
 
 export { showSuccessMessage, showErrorMessage};
-// const onDocumentKeydown = (evt) => isEscapeKey(removeMessage, evt);
-
-// const onBodyClick = removeMessage;
-
-// const onCloseMessageButtonClick = removeMessage;
-
-// const onMessageInnerClick = (evt) => evt.stopPropagation();
-
-// const findMessage = () => document.querySelectorAll('.error, .success');
-
-// function removeMessage() {
-//   const foundMessage = findMessage().item(0);
-//   foundMessage.remove();
-
-//   document.removeEventListener('keydown', onDocumentKeydown, true);
-//   document.body.removeEventListener('click', onBodyClick);
-// }
-
-// const createMessage = (template, buttonSelector, innerSelector) => {
-//   const message = template.cloneNode(true);
-//   const messageInner = message.querySelector(innerSelector);
-//   const closeMessageButton = message.querySelector(buttonSelector);
-
-//   document.addEventListener('keydown', onDocumentKeydown, true);
-//   document.body.addEventListener('click', onBodyClick);
-//   messageInner.addEventListener('click', onMessageInnerClick);
-//   closeMessageButton.addEventListener('click', onCloseMessageButtonClick);
-
-//   document.body.append(message);
-// };
-
-// const showSuccessMessage = () => createMessage(successMessage, '.success__button', '.success__inner');
-// const showErrorMessage = () => createMessage(errorMessage, '.error__button', '.error__inner');
-
-// export { showSuccessMessage, showErrorMessage };
