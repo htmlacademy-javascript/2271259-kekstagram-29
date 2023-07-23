@@ -2,13 +2,8 @@ import { renderGallery } from './gallery.js';
 import { initiateForm, onCloseFormModal } from './form.js';
 import { getData, sendData } from './server.js';
 import { showErrorMessage, showSuccessMessage } from './message.js';
-import { showAlert } from './utile.js';
-
-// getData()
-//   .then(renderGallery)
-//   .catch(({message}) => showErrorBlock(message));
-
-// initiateForm();
+import { showAlert, debounce } from './utile.js';
+import { init as initFilter ,getFilteredPictures} from './filter.js';
 
 initiateForm(async (data) => {
   try {
@@ -22,7 +17,9 @@ initiateForm(async (data) => {
 
 try {
   const data = await getData();
-  renderGallery(data);
+  const debouncedRenderGallery = debounce(renderGallery);
+  initFilter(data, debouncedRenderGallery);
+  renderGallery(getFilteredPictures());
 } catch(err) {
   showAlert(err.message);
 }
