@@ -1,6 +1,6 @@
 import {getRandomPositiveInteger, getRandomArrayElement, getId } from './utile.js';
 
-const similarPersonCount = 25;
+const SIMILAR_PERSON = 25;
 
 export const names = [
   'John',
@@ -45,7 +45,7 @@ const createPerson = () => ({
   comments: generateComments(),
 });
 
-const createSimilarPerson = () => Array.from({length: similarPersonCount}, createPerson, () => new createPerson());
+const createSimilarPerson = () => Array.from({length: SIMILAR_PERSON}, createPerson, () => new createPerson());
 
 
 export{createSimilarPerson, getRandomPositiveInteger };
