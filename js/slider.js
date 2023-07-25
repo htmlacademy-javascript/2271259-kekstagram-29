@@ -95,7 +95,7 @@ function onSliderUpdate (effect) {
   effectsValue.value = sliderValue;
 }
 
-const init = () => {
+const slider = () => {
   noUiSlider.create(
     effectSliderElement,
     makeSliderOptions(Effects[defaultEffect])
@@ -106,4 +106,4 @@ const init = () => {
   resetEffects();
 };
 
-export { init, resetEffects };
+export { slider, resetEffects };

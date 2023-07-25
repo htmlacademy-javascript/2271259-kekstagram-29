@@ -1,13 +1,13 @@
 const hashtagsSymbols = /^#[a-zа-яё0-9]{1,19}$/i;
-const hashtagsMin = 5;
-const hashtagsMax = 140;
+const HASHTAGS_MIN = 5;
+const HASHTAGS_MAX = 140;
 const hashtagMaxError = () => 'Слишком много хэштегов !';
 const hashtagUniquenessError = () => 'Два одинаковых хэштэга!';
 const hashtagSymbolsError = () => 'Невалидный хэштег !';
 const textError = () => 'Комментарий больше 140 символов !';
 
-const validateHashtag = (value) => value.split(/\s+/).length <= hashtagsMin;
-const validateTextarea = (value) => value.length <= hashtagsMax;
+const validateHashtag = (value) => value.split(/\s+/).length <= HASHTAGS_MIN;
+const validateTextarea = (value) => value.length <= HASHTAGS_MAX;
 
 const validateHashtagSymbols = (value) => {
   const hashtags = value.split(/\s+/);

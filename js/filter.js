@@ -1,4 +1,4 @@
-const pictureCount = 10;
+const PICTURE_COUNT = 10;
 const Filter = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
@@ -17,7 +17,7 @@ const sortByComments = (pictureA, pictureB) =>
 const getFilteredPictures = () => {
   switch(currentFilter) {
     case Filter.RANDOM:
-      return [...pictures].sort(sortRandomly).slice(0, pictureCount);
+      return [...pictures].sort(sortRandomly).slice(0, PICTURE_COUNT);
     case Filter.DISCUSSED:
       return [...pictures].sort(sortByComments);
     default:

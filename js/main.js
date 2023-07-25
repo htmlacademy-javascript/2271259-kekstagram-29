@@ -4,7 +4,9 @@ import { getData, sendData } from './server.js';
 import { showErrorMessage, showSuccessMessage } from './message.js';
 import { showAlert, debounce } from './utile.js';
 import { init as initFilter ,getFilteredPictures} from './filter.js';
+import { init } from './scale.js';
 
+init();
 initiateForm(async (data) => {
   try {
     await sendData(data);
