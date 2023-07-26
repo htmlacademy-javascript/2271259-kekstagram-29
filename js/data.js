@@ -49,6 +49,3 @@ const createSimilarPerson = () => Array.from({length: SIMILAR_PERSON}, createPer
 
 
 export{createSimilarPerson, getRandomPositiveInteger };
-
-// Filling moudules
-// Filling modules #2

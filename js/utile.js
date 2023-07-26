@@ -18,7 +18,10 @@ const getId = () => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const alertShowTime = 5000;
+const show = (element) => element.classList.remove('hidden');
+const hide = (element) => element.classList.add('hidden');
+
+const ALERT_SHOW_TIME = 5000;
 const showAlert = (message) => {
   const alert = document.createElement('div');
   alert.style.position = 'absolute';
@@ -34,7 +37,7 @@ const showAlert = (message) => {
 
   setTimeout(() => {
     alert.remove();
-  }, alertShowTime);
+  }, ALERT_SHOW_TIME);
 };
 
 function debounce (callback, timeoutDelay = 500) {
@@ -50,20 +53,5 @@ function debounce (callback, timeoutDelay = 500) {
   };
 }
 
-function throttle (callback, delayBetweenFrames) {
 
-  let lastTime = 0;
-
-  return (...rest) => {
-
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-}
-
-
-export {getRandomPositiveInteger, getRandomArrayElement, getId, isEscapeKey, showAlert, debounce, throttle};
+export {getRandomPositiveInteger, getRandomArrayElement, getId, isEscapeKey, showAlert, debounce, show, hide};

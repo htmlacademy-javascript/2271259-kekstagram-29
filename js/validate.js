@@ -9,6 +9,18 @@ const textError = () => 'Комментарий больше 140 символо�
 const validateHashtag = (value) => value.split(/\s+/).length <= HASHTAGS_MIN;
 const validateTextarea = (value) => value.length <= HASHTAGS_MAX;
 
+const CreatePristineValidator = (form) => new Pristine(
+  form,
+  {
+    classTo: 'img-upload__field-wrapper',
+    errorClass: 'img-upload__field-wrapper--invalid',
+    successClass: 'img-upload__field-wrapper--valid',
+    errorTextParent: 'img-upload__field-wrapper',
+    errorTextTag: 'div',
+    errorTextClass: 'text__error'
+  },
+  true);
+
 const validateHashtagSymbols = (value) => {
   const hashtags = value.split(/\s+/);
   return !value.length || hashtags.every((hashtag) => hashtagsSymbols.test(hashtag));
@@ -29,14 +41,7 @@ const formValidation = (form) => {
   const inputHashtags = form.querySelector('.text__hashtags');
   const textarea = form.querySelector('.text__description');
 
-  const pristine = new Pristine(form, {
-    classTo: 'img-upload__field-wrapper',
-    errorClass: 'img-upload__field-wrapper--invalid',
-    successClass: 'img-upload__field-wrapper--valid',
-    errorTextParent: 'img-upload__field-wrapper',
-    errorTextTag: 'div',
-    errorTextClass: 'text__error'
-  }, true);
+  const pristine = CreatePristineValidator(form);
 
   pristine.addValidator(inputHashtags, validateHashtag, hashtagMaxError);
   pristine.addValidator(inputHashtags, validateUniqueness, hashtagUniquenessError);

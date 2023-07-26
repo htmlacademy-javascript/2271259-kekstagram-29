@@ -24,10 +24,10 @@ const zoom = (step) => {
 const onZoomInButtonClick = () => zoom(SCALE_STEP);
 const onZoomOutButtonClick = () => zoom(-SCALE_STEP);
 
-const init = () => {
+const createFormScaling = () => {
   resetScale();
   zoomInButton.addEventListener('click', onZoomInButtonClick);
   zoomOutButton.addEventListener('click', onZoomOutButtonClick);
 };
 
-export { init, resetScale };
+export { createFormScaling };
