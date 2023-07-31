@@ -1,33 +1,34 @@
-const MAX_SCALE = 100;
-const MIN_SCALE = 25;
-const SCALE_STEP = 25;
+const scaleInitial = 25;
+const scaleMin = 25;
+const scaleMax = 100;
 
-const zoomOutButton = document.querySelector('.scale__control--smaller');
-const zoomInButton = document.querySelector('.scale__control--bigger');
-const scaleFieldValue = document.querySelector('.scale__control--value');
-const scalePreview = document.querySelector('.img-upload__preview img');
+const onScaleUpButtonClick = (...parameters) => changeScale('up', ...parameters);
 
-const scaleImage = (value) => {
-  scalePreview.style.transform = `scale(${value / 100})`;
-  scaleFieldValue.value = `${value}%`;
-};
+const onScaleDownButtonClick = (...parameters) => changeScale('down', ...parameters);
 
-const resetScale = () => scaleImage(MAX_SCALE);
+function changeScale(direction, input, image) {
+  let newValue = parseInt(input.value, 10);
+  newValue += direction === 'up' ? scaleInitial : -scaleInitial;
 
-const zoom = (step) => {
-  const scaleFieldValueNumber = parseInt(scaleFieldValue.value, 10) + step;
-  if (scaleFieldValueNumber <= MAX_SCALE && scaleFieldValueNumber >= MIN_SCALE) {
-    scaleImage(scaleFieldValueNumber);
+  if (newValue >= scaleMin && newValue <= scaleMax) {
+    const transformValue = newValue / 100;
+
+    input.value = `${newValue}%`;
+    image.style.transform = `scale(${transformValue})`;
   }
+}
+
+const createFormScaling = (form, image) => {
+  const scaleUpButton = form.querySelector('.scale__control--bigger');
+  const scaleDownButton = form.querySelector('.scale__control--smaller');
+  const scaleInput = form.querySelector('.scale__control--value');
+
+  scaleUpButton.addEventListener('click', onScaleUpButtonClick.bind(null, scaleInput, image));
+  scaleDownButton.addEventListener('click', onScaleDownButtonClick.bind(null, scaleInput, image));
+
+  return {
+    reset: () => image.style.removeProperty('transform'),
+  };
 };
 
-const onZoomInButtonClick = () => zoom(SCALE_STEP);
-const onZoomOutButtonClick = () => zoom(-SCALE_STEP);
-
-const init = () => {
-  resetScale();
-  zoomInButton.addEventListener('click', onZoomInButtonClick);
-  zoomOutButton.addEventListener('click', onZoomOutButtonClick);
-};
-
-export { init, resetScale };
+export { createFormScaling };

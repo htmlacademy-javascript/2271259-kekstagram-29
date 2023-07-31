@@ -1,55 +1,63 @@
-const hashtagsSymbols = /^#[a-zа-яё0-9]{1,19}$/i;
-const HASHTAGS_MIN = 5;
-const HASHTAGS_MAX = 140;
-const hashtagMaxError = () => 'Слишком много хэштегов !';
-const hashtagUniquenessError = () => 'Два одинаковых хэштэга!';
-const hashtagSymbolsError = () => 'Невалидный хэштег !';
-const textError = () => 'Комментарий больше 140 символов !';
+const hashtagPattern = /^#[a-zа-яё0-9]{1,19}$/i;
+const hashtagLimit = 5;
+const commentLimit = 140;
 
-const validateHashtag = (value) => value.split(/\s+/).length <= HASHTAGS_MIN;
-const validateTextarea = (value) => value.length <= HASHTAGS_MAX;
+const onElementKeydown = (evt) => evt.stopPropagation();
 
-const validateHashtagSymbols = (value) => {
-  const hashtags = value.split(/\s+/);
-  return !value.length || hashtags.every((hashtag) => hashtagsSymbols.test(hashtag));
-};
-
-const hashtagsKeydown = (evt) => evt.stopPropagation();
-const textareaKeydown = (evt) => evt.stopPropagation();
-
-const validateUniqueness = (value) => {
-  const hashtags = value.toLowerCase()
-    .split(/\s+/)
-    .map((hashtag) => hashtag.toLowerCase());
-
-  return hashtags.length === new Set(hashtags).size;
-};
-
-const formValidation = (form) => {
-  const inputHashtags = form.querySelector('.text__hashtags');
-  const textarea = form.querySelector('.text__description');
-
-  const pristine = new Pristine(form, {
+const pristineValidator = (form) => new Pristine(
+  form,
+  {
     classTo: 'img-upload__field-wrapper',
     errorClass: 'img-upload__field-wrapper--invalid',
     successClass: 'img-upload__field-wrapper--valid',
     errorTextParent: 'img-upload__field-wrapper',
     errorTextTag: 'div',
     errorTextClass: 'text__error'
-  }, true);
+  },
+  true);
 
-  pristine.addValidator(inputHashtags, validateHashtag, hashtagMaxError);
-  pristine.addValidator(inputHashtags, validateUniqueness, hashtagUniquenessError);
-  pristine.addValidator(inputHashtags, validateHashtagSymbols , hashtagSymbolsError);
-  pristine.addValidator(textarea, validateTextarea, textError);
+const normalizeHashtags = (hashtagString) => hashtagString.trim().toLowerCase().split(/\s+/);
 
-  inputHashtags.addEventListener('keydown', hashtagsKeydown);
-  textarea.addEventListener('keydown', textareaKeydown);
+const validHashtag = (hashtag) => hashtagPattern.test(hashtag);
+
+const validateHashtagCount = (hashtagString) =>
+  normalizeHashtags(hashtagString).length <= hashtagLimit;
+
+const validateHashtagUniqueness = (hashtagString) => {
+  const normalizedHashtags = normalizeHashtags(hashtagString);
+  return normalizedHashtags.length === new Set(normalizedHashtags).size;
+};
+
+const validateHashtagPattern = (hashtagString) =>
+  !hashtagString || normalizeHashtags(hashtagString).every(validHashtag);
+
+const validateTextarea = ({ length }) => length <= commentLimit;
+
+const hashtagCountErrorMessage = () => 'Нельзя указать больше пяти хэш-тегов !';
+const hashtagUniqErrorMessage = () => 'Один и тот же хэш-тег не может быть использован дважды !';
+const hashtagPatternErrorMessage = () => 'Введён невалидный хэш-тег !';
+const textareaErrorMessage = () => 'Длина комментария не может составлять больше 140 символов !';
+
+const stopKeydownEventPropagation = (...elements) => elements.forEach((element) =>
+  element.addEventListener('keydown', onElementKeydown));
+
+const createFormValidation = (form) => {
+  const hashtagsInput = form.querySelector('.text__hashtags');
+  const textarea = form.querySelector('.text__description');
+
+  const pristine = pristineValidator(form);
+
+  pristine.addValidator(hashtagsInput, validateHashtagCount, hashtagCountErrorMessage, 3, true);
+  pristine.addValidator(hashtagsInput, validateHashtagUniqueness, hashtagUniqErrorMessage, 2, true);
+  pristine.addValidator(hashtagsInput, validateHashtagPattern, hashtagPatternErrorMessage, 1);
+  pristine.addValidator(textarea, validateTextarea, textareaErrorMessage);
+
+  stopKeydownEventPropagation(hashtagsInput, textarea);
 
   return {
-    validate: () => pristine.validate(inputHashtags, textarea),
+    validate: () => pristine.validate([textarea, hashtagsInput]),
     reset: pristine.reset,
   };
 };
 
-export {formValidation};
+export { createFormValidation };

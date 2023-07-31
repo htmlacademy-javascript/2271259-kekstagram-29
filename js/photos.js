@@ -1,28 +1,121 @@
-const pictureTemplate = document
-  .querySelector('#picture')
-  .content.querySelector('.picture');
+import { escapeKey, show, hide, hidden } from './utils.js';
 
-const createPhotos = ({ url, description, likes, comments, id }) => {
-  const pictureElement = pictureTemplate.cloneNode(true);
+const COMMENTS_PER_LOAD = 5;
 
-  pictureElement.querySelector('.picture__img').src = url;
-  pictureElement.querySelector('.picture__img').alt = description;
-  pictureElement.querySelector('.picture__comments').textContent =
-    comments.length;
-  pictureElement.querySelector('.picture__likes').textContent = likes;
-  pictureElement.dataset.thumbnailId = id;
+const photoModal = document.querySelector('.big-picture');
+const photo = photoModal.querySelector('.big-picture__img img');
+const likesCounter = photoModal.querySelector('.likes-count');
+const currentCommentCounter = photoModal.querySelector('.social__comment-count').firstChild;
+const overallCommentCounter = photoModal.querySelector('.comments-count');
+const photoCaption = photoModal.querySelector('.social__caption');
+const commentList = photoModal.querySelector('.social__comments');
+const closeModalButton = photoModal.querySelector('#picture-cancel');
+const loadCommentsButton = photoModal.querySelector('.comments-loader');
+const commentTemplate = document.querySelector('#comment')
+  .content
+  .querySelector('.social__comment');
 
-  return pictureElement;
+const onDocumentKeydown = (evt) => escapeKey(closePhotoModal, evt);
+
+const onCloseModalButtonClick = () => closePhotoModal();
+
+const onLoadCommentsButtonClick = () => {
+  const count = showComments();
+  increaseCommentCounter(count);
 };
 
-const renderPictures = (pictures, container) => {
-  const fragment = document.createDocumentFragment();
-  pictures.forEach((picture) => {
-    const thumbnail = createPhotos(picture);
-    fragment.append(thumbnail);
-  });
-
-  container.append(fragment);
+const setCommentCounter = (initialCount) => {
+  const initialCommentCount = initialCount >= COMMENTS_PER_LOAD
+    ? COMMENTS_PER_LOAD
+    : initialCount;
+  currentCommentCounter.textContent = `${initialCommentCount} из `;
 };
 
-export { renderPictures };
+function increaseCommentCounter(count) {
+  let currentCommentCount = parseInt(currentCommentCounter.textContent, 10);
+  currentCommentCount += count;
+  currentCommentCounter.textContent = `${currentCommentCount} из `;
+}
+
+const createComment = ({ avatar: avatarPath, message, name }) => {
+  const comment = commentTemplate.cloneNode(true);
+
+  const avatar = comment.querySelector('.social__picture');
+  avatar.src = avatarPath;
+  avatar.alt = name;
+
+  comment.querySelector('.social__text').textContent = message;
+
+  return comment;
+};
+
+const appendComments = (commentData) => {
+  commentList.innerHTML = '';
+  commentList.append(...commentData.map((commentDatum, index) => {
+    const comment = createComment(commentDatum);
+
+    if (index >= COMMENTS_PER_LOAD) {
+      hide(comment);
+    }
+
+    return comment;
+  }));
+};
+
+function showComments() {
+  const filteredComments = [...commentList.children].filter(hidden);
+  const { length } = filteredComments;
+
+  if (length <= COMMENTS_PER_LOAD) {
+    hide(loadCommentsButton);
+  }
+
+  let index = 0;
+  while (index < length && index < COMMENTS_PER_LOAD) {
+    show(filteredComments[index]);
+    index += 1;
+  }
+
+  return index;
+}
+
+function closePhotoModal() {
+  document.body.classList.remove('modal-open');
+  show(loadCommentsButton);
+  hide(photoModal);
+
+  document.removeEventListener('keydown', onDocumentKeydown);
+}
+
+const openPhotoModal = () => {
+  document.body.classList.add('modal-open');
+  show(photoModal);
+
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+const initiatePhotoModal = (url, description, likes, comments) => {
+  const { length } = comments;
+
+  photo.src = url;
+  likesCounter.textContent = likes;
+  overallCommentCounter.textContent = length;
+  photoCaption.textContent = description;
+
+  if (length <= COMMENTS_PER_LOAD) {
+    hide(loadCommentsButton);
+  }
+
+  setCommentCounter(length);
+  appendComments(comments);
+};
+
+const renderPhotoModal = (...photoParameters) => {
+  initiatePhotoModal(...photoParameters);
+  openPhotoModal();
+};
+
+closeModalButton.addEventListener('click', onCloseModalButtonClick);
+loadCommentsButton.addEventListener('click', onLoadCommentsButtonClick);
+
+export { renderPhotoModal };
