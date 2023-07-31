@@ -1,4 +1,4 @@
-import { handleEscapeKey } from './utils.js';
+import { escapeKey } from './utils.js';
 
 const successMessageTemplate = document.querySelector('#success')
   .content
@@ -7,11 +7,11 @@ const errorMessageTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
-const onDocumentKeydown = (evt) => handleEscapeKey(removeMessage, evt);
+const onDocumentKeydown = (evt) => escapeKey(removeMessage, evt);
 
-const onBodyClick = removeMessage;
+const bodyClick = removeMessage;
 
-const onCloseMessageButtonClick = removeMessage;
+const closeMessageButtonClick = removeMessage;
 
 const onMessageInnerClick = (evt) => evt.stopPropagation();
 
@@ -22,7 +22,7 @@ function removeMessage() {
   foundMessage.remove();
 
   document.removeEventListener('keydown', onDocumentKeydown, true);
-  document.body.removeEventListener('click', onBodyClick);
+  document.body.removeEventListener('click', bodyClick);
 }
 
 const createMessage = (template, buttonSelector, innerSelector) => {
@@ -31,9 +31,9 @@ const createMessage = (template, buttonSelector, innerSelector) => {
   const closeMessageButton = message.querySelector(buttonSelector);
 
   document.addEventListener('keydown', onDocumentKeydown, true);
-  document.body.addEventListener('click', onBodyClick);
+  document.body.addEventListener('click', bodyClick);
   messageInner.addEventListener('click', onMessageInnerClick);
-  closeMessageButton.addEventListener('click', onCloseMessageButtonClick);
+  closeMessageButton.addEventListener('click', closeMessageButtonClick);
 
   document.body.append(message);
 };

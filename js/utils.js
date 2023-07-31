@@ -13,10 +13,10 @@ const errorBlockStyle = {
   backgroundColor: '#fb4c4c',
 };
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const escape = (evt) => evt.key === 'Escape';
 
-const handleEscapeKey = (callback, evt) => {
-  if (isEscapeKey(evt)) {
+const escapeKey = (callback, evt) => {
+  if (escape(evt)) {
     evt.stopPropagation();
     evt.preventDefault();
     callback();
@@ -27,7 +27,7 @@ const show = (element) => element.classList.remove('hidden');
 
 const hide = (element) => element.classList.add('hidden');
 
-const isHidden = (element) => element.classList.contains('hidden');
+const hidden = (element) => element.classList.contains('hidden');
 
 const showErrorBlock = (message) => {
   const errorBlock = document.createElement('div');
@@ -51,24 +51,24 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-const getRandomIntegerInclusive = (min, max) => {
+const getRandomInteger = (min, max) => {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
   return Math.floor(Math.random() * (upper - lower + 1) + lower);
 };
 
-const setRandomUniqueIndexPicker = (min, max) => {
+const uniqueIndex = (min, max) => {
   const values = new Set();
 
   return () => {
-    let currentValue = getRandomIntegerInclusive(min, max);
+    let currentValue = getRandomInteger(min, max);
 
     if (values.size >= (max - min + 1)) {
       return null;
     }
 
     while (values.has(currentValue)) {
-      currentValue = getRandomIntegerInclusive(min, max);
+      currentValue = getRandomInteger(min, max);
     }
 
     values.add(currentValue);
@@ -76,18 +76,18 @@ const setRandomUniqueIndexPicker = (min, max) => {
   };
 };
 
-const setRandomUniqueArrayPicker = (elements) => {
-  const getRandomUniqueIndex = setRandomUniqueIndexPicker(0, elements.length - 1);
+const uniqueArray = (elements) => {
+  const getRandomUniqueIndex = uniqueIndex(0, elements.length - 1);
 
   return () => elements[getRandomUniqueIndex()];
 };
 
 export {
-  handleEscapeKey,
+  escapeKey,
   show,
   hide,
-  isHidden,
+  hidden,
   showErrorBlock,
   debounce,
-  setRandomUniqueArrayPicker,
+  uniqueArray,
 };

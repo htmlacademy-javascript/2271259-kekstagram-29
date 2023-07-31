@@ -1,4 +1,4 @@
-import { debounce, setRandomUniqueArrayPicker } from './utils.js';
+import { debounce, uniqueArray } from './utils.js';
 
 const delay = 500;
 const photosCount = 10;
@@ -9,14 +9,14 @@ const filtersBtn = document.querySelectorAll('.img-filters__button');
 const filters = {
   'filter-default': (photos) => photos,
   'filter-random': (photos) => {
-    const getRandomUniqueArrayElement = setRandomUniqueArrayPicker(photos);
-    return Array.from({ length: photosCount }, getRandomUniqueArrayElement);
+    const getUniqueArrayElement = uniqueArray(photos);
+    return Array.from({ length: photosCount }, getUniqueArrayElement);
   },
   'filter-discussed': (photos) =>
     photos.slice().sort((photoA, photoB) => photoB.comments.length - photoA.comments.length),
 };
 
-function onFilterButtonClick(photos, optimizedRenderThumbnails, filtersState) {
+function filterBtnClick(photos, optimizedRenderThumbnails, filtersState) {
   const filterPhotos = filters[this.id];
 
   if (filterPhotos && filtersState.activeFilter !== this) {
@@ -42,7 +42,7 @@ const initiateFilters = (photos, renderThumbnails) => {
   filtersContainer.classList.remove('img-filters--inactive');
 
   filtersBtn.forEach((filterButton) =>
-    filterButton.addEventListener('click', onFilterButtonClick.bind(
+    filterButton.addEventListener('click', filterBtnClick.bind(
       filterButton,
       photos,
       optimizedRenderThumbnails,

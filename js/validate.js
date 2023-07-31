@@ -4,7 +4,7 @@ const commentLimit = 140;
 
 const onElementKeydown = (evt) => evt.stopPropagation();
 
-const createPristineValidator = (form) => new Pristine(
+const pristineValidator = (form) => new Pristine(
   form,
   {
     classTo: 'img-upload__field-wrapper',
@@ -18,7 +18,7 @@ const createPristineValidator = (form) => new Pristine(
 
 const normalizeHashtags = (hashtagString) => hashtagString.trim().toLowerCase().split(/\s+/);
 
-const isValidHashtag = (hashtag) => hashtagPattern.test(hashtag);
+const validHashtag = (hashtag) => hashtagPattern.test(hashtag);
 
 const validateHashtagCount = (hashtagString) =>
   normalizeHashtags(hashtagString).length <= hashtagLimit;
@@ -29,14 +29,14 @@ const validateHashtagUniqueness = (hashtagString) => {
 };
 
 const validateHashtagPattern = (hashtagString) =>
-  !hashtagString || normalizeHashtags(hashtagString).every(isValidHashtag);
+  !hashtagString || normalizeHashtags(hashtagString).every(validHashtag);
 
 const validateTextarea = ({ length }) => length <= commentLimit;
 
-const getHashtagCountErrorMessage = () => 'Нельзя указать больше пяти хэш-тегов !';
-const getHashtagUniqErrorMessage = () => 'Один и тот же хэш-тег не может быть использован дважды !';
-const getHashtagPatternErrorMessage = () => 'Введён невалидный хэш-тег !';
-const getTextareaErrorMessage = () => 'Длина комментария не может составлять больше 140 символов !';
+const hashtagCountErrorMessage = () => 'Нельзя указать больше пяти хэш-тегов !';
+const hashtagUniqErrorMessage = () => 'Один и тот же хэш-тег не может быть использован дважды !';
+const hashtagPatternErrorMessage = () => 'Введён невалидный хэш-тег !';
+const textareaErrorMessage = () => 'Длина комментария не может составлять больше 140 символов !';
 
 const stopKeydownEventPropagation = (...elements) => elements.forEach((element) =>
   element.addEventListener('keydown', onElementKeydown));
@@ -45,12 +45,12 @@ const createFormValidation = (form) => {
   const hashtagsInput = form.querySelector('.text__hashtags');
   const textarea = form.querySelector('.text__description');
 
-  const pristine = createPristineValidator(form);
+  const pristine = pristineValidator(form);
 
-  pristine.addValidator(hashtagsInput, validateHashtagCount, getHashtagCountErrorMessage, 3, true);
-  pristine.addValidator(hashtagsInput, validateHashtagUniqueness, getHashtagUniqErrorMessage, 2, true);
-  pristine.addValidator(hashtagsInput, validateHashtagPattern, getHashtagPatternErrorMessage, 1);
-  pristine.addValidator(textarea, validateTextarea, getTextareaErrorMessage);
+  pristine.addValidator(hashtagsInput, validateHashtagCount, hashtagCountErrorMessage, 3, true);
+  pristine.addValidator(hashtagsInput, validateHashtagUniqueness, hashtagUniqErrorMessage, 2, true);
+  pristine.addValidator(hashtagsInput, validateHashtagPattern, hashtagPatternErrorMessage, 1);
+  pristine.addValidator(textarea, validateTextarea, textareaErrorMessage);
 
   stopKeydownEventPropagation(hashtagsInput, textarea);
 

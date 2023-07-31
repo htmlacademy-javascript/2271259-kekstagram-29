@@ -1,4 +1,4 @@
-import { handleEscapeKey, show, hide, isHidden } from './utils.js';
+import { escapeKey, show, hide, hidden } from './utils.js';
 
 const COMMENTS_PER_LOAD = 5;
 
@@ -15,7 +15,7 @@ const commentTemplate = document.querySelector('#comment')
   .content
   .querySelector('.social__comment');
 
-const onDocumentKeydown = (evt) => handleEscapeKey(closePhotoModal, evt);
+const onDocumentKeydown = (evt) => escapeKey(closePhotoModal, evt);
 
 const onCloseModalButtonClick = () => closePhotoModal();
 
@@ -63,7 +63,7 @@ const appendComments = (commentData) => {
 };
 
 function showComments() {
-  const filteredComments = [...commentList.children].filter(isHidden);
+  const filteredComments = [...commentList.children].filter(hidden);
   const { length } = filteredComments;
 
   if (length <= COMMENTS_PER_LOAD) {

@@ -1,5 +1,5 @@
 
-import { handleEscapeKey, show, hide } from './utils.js';
+import { escapeKey, show, hide } from './utils.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
 import { createFormValidation } from './validate.js';
 import { createFormScaling } from './scale.js';
@@ -26,7 +26,7 @@ const formScaling = createFormScaling(form, image);
 const formSlider = createFormSlider(form, image);
 const formPreview = createFormPreview(form, image);
 
-const onDocumentKeydown = (evt) => handleEscapeKey(closeFormModal, evt);
+const onDocumentKeydown = (evt) => escapeKey(closeFormModal, evt);
 
 const onUploadFileInputChange = (evt) => {
   const file = evt.target.files[0];
@@ -84,7 +84,7 @@ const switchSubmitButtonState = (state, text) => {
   submitButton.textContent = text;
 };
 
-const onFormSubmit = async (evt) => {
+const formSubmit = async (evt) => {
   evt.preventDefault();
   const isValidForm = formValidation.validate();
 
@@ -101,7 +101,7 @@ const onFormSubmit = async (evt) => {
 const initiateForm = () => {
   uploadFileInput.addEventListener('change', onUploadFileInputChange);
   closeModalButton.addEventListener('click', onCloseModalButtonClick);
-  form.addEventListener('submit', onFormSubmit);
+  form.addEventListener('submit', formSubmit);
 };
 
 export { initiateForm };
