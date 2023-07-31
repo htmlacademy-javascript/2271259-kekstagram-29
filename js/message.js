@@ -1,51 +1,44 @@
+import { handleEscapeKey } from './utils.js';
 
-const successMessage = document
-  .querySelector('#success')
-  .content.querySelector('.success');
-const errorMessage = document
-  .querySelector('#error')
-  .content.querySelector('.error');
-const body = document.querySelector('body');
+const successMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
 
-function hideMessage() {
-  const messageElement = document.querySelector('.success') || document.querySelector('.error');
-  messageElement.remove();
-  document.removeEventListener('keydown', onDocumentKeydown);
-  body.removeEventListener('click', onBodyClick);
+const onDocumentKeydown = (evt) => handleEscapeKey(removeMessage, evt);
+
+const onBodyClick = removeMessage;
+
+const onCloseMessageButtonClick = removeMessage;
+
+const onMessageInnerClick = (evt) => evt.stopPropagation();
+
+const findMessage = () => document.querySelectorAll('.error, .success');
+
+function removeMessage() {
+  const foundMessage = findMessage().item(0);
+  foundMessage.remove();
+
+  document.removeEventListener('keydown', onDocumentKeydown, true);
+  document.body.removeEventListener('click', onBodyClick);
 }
 
-function onBodyClick(evt) {
-  if (
-    evt.target.closest('.success__inner') ||
-    evt.target.closest('.error__inner')
-  ) {
-    return;
-  }
-  hideMessage();
-}
+const createMessage = (template, buttonSelector, innerSelector) => {
+  const message = template.cloneNode(true);
+  const messageInner = message.querySelector(innerSelector);
+  const closeMessageButton = message.querySelector(buttonSelector);
 
-function onDocumentKeydown(evt) {
-  if(evt.key === 'Escape') {
-    evt.preventDefault();
-    hideMessage();
-  }
-}
+  document.addEventListener('keydown', onDocumentKeydown, true);
+  document.body.addEventListener('click', onBodyClick);
+  messageInner.addEventListener('click', onMessageInnerClick);
+  closeMessageButton.addEventListener('click', onCloseMessageButtonClick);
 
-const showMessage = (messageElement, closeButtonClass) => {
-  body.append(messageElement);
-  document.addEventListener('keydown', onDocumentKeydown);
-  body.addEventListener('click', onBodyClick);
-  messageElement
-    .querySelector(closeButtonClass)
-    .addEventListener('click', hideMessage);
+  document.body.append(message);
 };
 
-const showSuccessMessage = () => {
-  showMessage(successMessage, '.success__button');
-};
+const showSuccessMessage = () => createMessage(successMessageTemplate, '.success__button', '.success__inner');
+const showErrorMessage = () => createMessage(errorMessageTemplate, '.error__button', '.error__inner');
 
-const showErrorMessage = () => {
-  showMessage(errorMessage, '.error__button');
-};
-
-export { showSuccessMessage, showErrorMessage};
+export { showSuccessMessage, showErrorMessage };

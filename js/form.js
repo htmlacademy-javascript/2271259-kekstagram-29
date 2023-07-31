@@ -1,32 +1,32 @@
-import { formValidation } from './validate.js';
+
+import { handleEscapeKey, show, hide } from './utils.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
+import { createFormValidation } from './validate.js';
+import { createFormScaling } from './scale.js';
 import { createFormSlider } from './slider.js';
-import {createFormScaling} from './scale.js';
+import { sendData } from './server.js';
 import { createFormPreview } from './preview.js';
 
-const form = document.querySelector('#upload-select-image');
-const inputUploadFile = form.querySelector('#upload-file');
-const formModal = form.querySelector('.img-upload__overlay');
-const buttonToCloseModal = form.querySelector('.img-upload__cancel');
-const image = form.querySelector('.img-upload__preview img');
+const FIELDS = ['hashtags', 'description'];
 
-const makeformValidation = formValidation(form);
-const formSlider = createFormSlider(form, image);
+const form = document.querySelector('#upload-select-image');
+const image = form.querySelector('.img-upload__preview img');
+const uploadFileInput = form.querySelector('#upload-file');
+const formModal = form.querySelector('.img-upload__overlay');
+const closeModalButton = form.querySelector('.img-upload__cancel');
+const submitButton = form.querySelector('.img-upload__submit');
+
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SUBMITTING: 'Опубликовываю...',
+};
+
+const formValidation = createFormValidation(form);
 const formScaling = createFormScaling(form, image);
+const formSlider = createFormSlider(form, image);
 const formPreview = createFormPreview(form, image);
 
-// const onInputToUploadFile = openFormModal;
-
-const onButtonToCloseModalClick = onCloseFormModal;
-
-const onFormSubmit = (evt) => {
-  const isValidForm = makeformValidation.validate();
-
-  if (isValidForm) {
-    form.submit();
-  }
-
-  evt.preventDefault();
-};
+const onDocumentKeydown = (evt) => handleEscapeKey(closeFormModal, evt);
 
 const onUploadFileInputChange = (evt) => {
   const file = evt.target.files[0];
@@ -37,33 +37,71 @@ const onUploadFileInputChange = (evt) => {
   }
 };
 
+const onCloseModalButtonClick = closeFormModal;
+
 const formReset = () => {
   form.reset();
-  makeformValidation.reset();
-  formSlider.reset();
+  formValidation.reset();
   formScaling.reset();
+  formSlider.reset();
   formPreview.reset();
 };
 
-function onCloseFormModal() {
+function closeFormModal() {
   document.body.classList.remove('modal-open');
-  formModal.classList.add('hidden');
+  hide(formModal);
 
   formReset();
 
-  document.removeEventListener('keydown', onCloseFormModal);
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 function openFormModal() {
   document.body.classList.add('modal-open');
-  formModal.classList.remove('hidden');
-  document.addEventListener('keydown', onCloseFormModal);
+  show(formModal);
+
+  document.addEventListener('keydown', onDocumentKeydown);
 }
 
+const sendFormData = (body) =>
+  sendData(body)
+    .then(() => {
+      showSuccessMessage();
+      closeFormModal();
+    })
+    .catch(showErrorMessage);
+
+const createFormData = (targetForm) => {
+  const data = new FormData(targetForm);
+
+  FIELDS.forEach((field) => data.set(field, data.get(field).trim()));
+
+  return data;
+};
+
+const switchSubmitButtonState = (state, text) => {
+  submitButton.disabled = state;
+  submitButton.textContent = text;
+};
+
+const onFormSubmit = async (evt) => {
+  evt.preventDefault();
+  const isValidForm = formValidation.validate();
+
+  if (isValidForm) {
+    switchSubmitButtonState(true, SubmitButtonText.SUBMITTING);
+
+    const data = createFormData(evt.target);
+    await sendFormData(data);
+
+    switchSubmitButtonState(false, SubmitButtonText.IDLE);
+  }
+};
+
 const initiateForm = () => {
-  inputUploadFile.addEventListener('change', onUploadFileInputChange);
-  buttonToCloseModal.addEventListener('click', onButtonToCloseModalClick);
+  uploadFileInput.addEventListener('change', onUploadFileInputChange);
+  closeModalButton.addEventListener('click', onCloseModalButtonClick);
   form.addEventListener('submit', onFormSubmit);
 };
 
-export { initiateForm, onCloseFormModal };
+export { initiateForm };

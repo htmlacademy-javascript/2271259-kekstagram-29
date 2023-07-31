@@ -1,4 +1,4 @@
-const FILE_TYPES = [
+const fileTypes = [
   'image/jpeg',
   'image/png',
   'image/webp',
@@ -9,7 +9,7 @@ const createFormPreview = (form, image) => {
   const effectsPreviews = form.querySelectorAll('.effects__preview');
 
   return {
-    validate: (file) => FILE_TYPES.includes(file.type),
+    validate: (file) => fileTypes.includes(file.type),
     refresh: (file) => {
       const imagePath = URL.createObjectURL(file);
 

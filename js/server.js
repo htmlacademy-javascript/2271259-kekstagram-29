@@ -1,34 +1,40 @@
-const baseUrl = 'https://29.javascript.pages.academy/kekstagram';
-const Route = {
-  getData: '/data',
-  sendData: '/'
+const server = 'https://29.javascript.pages.academy';
+
+const Pathname = {
+  GET: '/kekstagram/data',
+  POST: '/kekstagram',
 };
 
-const Method = {
-  GET: 'GET',
-  POST: 'POST',
+const errorText = {
+  get: () => 'Не удалось загрузить данные! Попробуйте обновить страницу.',
+  post: () => 'Не удалось отправить форму! Попробуйте ещё раз.',
+  request: (code, text) => `Не удалось загрузить данные! Код ошибки: ${code}. Описание ошибки: ${text}.`,
 };
 
-const ErrorText = {
-  getData: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  sendData: 'Не удалось отправить форму. Попробуйте еще раз',
-};
+const request = (pathname, method = 'GET', body = null) => {
+  const url = new URL(pathname, server);
 
-const load = (route, errorText, method = Method.GET, body = null) =>
-  fetch(`${baseUrl}${route}`, { method, body})
+  return fetch(url, { method, body })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error();
+      const {ok, status, statusText} = response;
+
+      if (!ok) {
+        throw new Error(errorText.request(status, statusText), { cause: 'errorResponse' });
       }
 
       return response.json();
     })
+    .catch((err) => {
+      if (err.cause === 'errorResponse') {
+        throw err;
+      }
 
-    .catch(() => {
-      throw new Error (errorText);
+      throw new Error(errorText[method.toLowerCase()]());
     });
-const getData = () => load(Route.getData, ErrorText.getData);
+};
 
-const sendData = (body) => load(Route.sendData, ErrorText.sendData, Method.POST, body);
+const getData = () => request(Pathname.GET);
 
-export { getData, sendData};
+const sendData = (body) => request(Pathname.POST, 'POST', body);
+
+export { getData, sendData };
