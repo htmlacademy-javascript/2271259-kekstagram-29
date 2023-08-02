@@ -1,6 +1,10 @@
-import { escapeKey, show, hide, hidden } from './utils.js';
+import { escapeKey, show, hide, isHidden } from './utils.js';
 
 const COMMENTS_PER_LOAD = 5;
+
+let comment = '';
+let avatar = '';
+let filteredComments = '';
 
 const photoModal = document.querySelector('.big-picture');
 const photo = photoModal.querySelector('.big-picture__img img');
@@ -38,9 +42,9 @@ function increaseCommentCounter(count) {
 }
 
 const createComment = ({ avatar: avatarPath, message, name }) => {
-  const comment = commentTemplate.cloneNode(true);
+  comment = commentTemplate.cloneNode(true);
 
-  const avatar = comment.querySelector('.social__picture');
+  avatar = comment.querySelector('.social__picture');
   avatar.src = avatarPath;
   avatar.alt = name;
 
@@ -52,7 +56,7 @@ const createComment = ({ avatar: avatarPath, message, name }) => {
 const appendComments = (commentData) => {
   commentList.innerHTML = '';
   commentList.append(...commentData.map((commentDatum, index) => {
-    const comment = createComment(commentDatum);
+    comment = createComment(commentDatum);
 
     if (index >= COMMENTS_PER_LOAD) {
       hide(comment);
@@ -62,8 +66,9 @@ const appendComments = (commentData) => {
   }));
 };
 
+
 function showComments() {
-  const filteredComments = [...commentList.children].filter(hidden);
+  filteredComments = [...commentList.children].filter(isHidden);
   const { length } = filteredComments;
 
   if (length <= COMMENTS_PER_LOAD) {

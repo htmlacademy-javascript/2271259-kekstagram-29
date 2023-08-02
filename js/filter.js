@@ -1,7 +1,7 @@
-import { debounce, uniqueArray } from './utils.js';
+import { debounce, getUniqueArray} from './utils.js';
 
-const delay = 500;
-const photosCount = 10;
+const DELAY = 500;
+const PHOTOS_COUNT = 10;
 
 const filtersContainer = document.querySelector('.img-filters');
 const filtersBtn = document.querySelectorAll('.img-filters__button');
@@ -9,15 +9,16 @@ const filtersBtn = document.querySelectorAll('.img-filters__button');
 const filters = {
   'filter-default': (photos) => photos,
   'filter-random': (photos) => {
-    const getUniqueArrayElement = uniqueArray(photos);
-    return Array.from({ length: photosCount }, getUniqueArrayElement);
+    const getUniqueArrayElement = getUniqueArray(photos);
+    return Array.from({ length: PHOTOS_COUNT }, getUniqueArrayElement);
   },
   'filter-discussed': (photos) =>
     photos.slice().sort((photoA, photoB) => photoB.comments.length - photoA.comments.length),
 };
 
-function filterBtnClick(photos, optimizedRenderThumbnails, filtersState) {
-  const filterPhotos = filters[this.id];
+const filterPhotos = filters[filters.id];
+
+function onFilterBtnClick(photos, optimizedRenderThumbnails, filtersState) {
 
   if (filterPhotos && filtersState.activeFilter !== this) {
     const filteredPhotos = filterPhotos(photos);
@@ -34,7 +35,7 @@ function renderButton(clickedButton, filtersState) {
 }
 
 const initiateFilters = (photos, renderThumbnails) => {
-  const optimizedRenderThumbnails = debounce(renderThumbnails, delay);
+  const optimizedRenderThumbnails = debounce(renderThumbnails, DELAY);
   const filtersState = {
     activeFilter: document.querySelector('.img-filters__button--active'),
   };
@@ -42,7 +43,7 @@ const initiateFilters = (photos, renderThumbnails) => {
   filtersContainer.classList.remove('img-filters--inactive');
 
   filtersBtn.forEach((filterButton) =>
-    filterButton.addEventListener('click', filterBtnClick.bind(
+    filterButton.addEventListener('click', onFilterBtnClick.bind(
       filterButton,
       photos,
       optimizedRenderThumbnails,

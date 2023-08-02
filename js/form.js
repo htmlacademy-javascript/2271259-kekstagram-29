@@ -84,7 +84,7 @@ const switchSubmitButtonState = (state, text) => {
   submitButton.textContent = text;
 };
 
-const formSubmit = async (evt) => {
+const onFormSubmit = async (evt) => {
   evt.preventDefault();
   const isValidForm = formValidation.validate();
 
@@ -101,7 +101,7 @@ const formSubmit = async (evt) => {
 const initiateForm = () => {
   uploadFileInput.addEventListener('change', onUploadFileInputChange);
   closeModalButton.addEventListener('click', onCloseModalButtonClick);
-  form.addEventListener('submit', formSubmit);
+  form.addEventListener('submit', onFormSubmit);
 };
 
 export { initiateForm };

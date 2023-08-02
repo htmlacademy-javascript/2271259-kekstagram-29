@@ -1,5 +1,6 @@
 import { escapeKey } from './utils.js';
 
+
 const successMessageTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
@@ -11,14 +12,14 @@ const onDocumentKeydown = (evt) => escapeKey(removeMessage, evt);
 
 const bodyClick = removeMessage;
 
-const closeMessageButtonClick = removeMessage;
+const onCloseMessageButtonClick = removeMessage;
 
 const onMessageInnerClick = (evt) => evt.stopPropagation();
 
 const findMessage = () => document.querySelectorAll('.error, .success');
+const foundMessage = findMessage().item(0);
 
 function removeMessage() {
-  const foundMessage = findMessage().item(0);
   foundMessage.remove();
 
   document.removeEventListener('keydown', onDocumentKeydown, true);
@@ -33,7 +34,7 @@ const createMessage = (template, buttonSelector, innerSelector) => {
   document.addEventListener('keydown', onDocumentKeydown, true);
   document.body.addEventListener('click', bodyClick);
   messageInner.addEventListener('click', onMessageInnerClick);
-  closeMessageButton.addEventListener('click', closeMessageButtonClick);
+  closeMessageButton.addEventListener('click', onCloseMessageButtonClick);
 
   document.body.append(message);
 };
