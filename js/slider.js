@@ -1,5 +1,8 @@
 import { show, hide } from './utils.js';
 
+let newValue = '';
+let newFilterValue = '';
+
 const sliderConfigs = {
   chrome: {
     option: {
@@ -92,8 +95,8 @@ const createSlider = (slider) => {
 };
 
 const onSliderUpdate = (input, image, values, handle) => {
-  const newValue = values[handle];
-  const newFilterValue = image.style.filter.replace(/\(.*\)/, `(${newValue})`);
+  newValue = values[handle];
+  newFilterValue = image.style.filter.replace(/\(.*\)/, `(${newValue})`);
 
   input.value = newValue.toString();
   image.style.filter = newFilterValue;

@@ -1,4 +1,4 @@
-const errotTime = 3000;
+const ERROR_TIME = 3000;
 
 const errorBlockStyle = {
   zIndex: '10',
@@ -27,7 +27,7 @@ const show = (element) => element.classList.remove('hidden');
 
 const hide = (element) => element.classList.add('hidden');
 
-const hidden = (element) => element.classList.contains('hidden');
+const isHidden = (element) => element.classList.contains('hidden');
 
 const showErrorBlock = (message) => {
   const errorBlock = document.createElement('div');
@@ -39,7 +39,7 @@ const showErrorBlock = (message) => {
 
   document.body.append(errorBlock);
 
-  setTimeout(() => errorBlock.remove(), errotTime);
+  setTimeout(() => errorBlock.remove(), ERROR_TIME);
 };
 
 const debounce = (callback, timeoutDelay = 500) => {
@@ -57,7 +57,7 @@ const getRandomInteger = (min, max) => {
   return Math.floor(Math.random() * (upper - lower + 1) + lower);
 };
 
-const uniqueIndex = (min, max) => {
+const getUniqueIndex = (min, max) => {
   const values = new Set();
 
   return () => {
@@ -76,8 +76,8 @@ const uniqueIndex = (min, max) => {
   };
 };
 
-const uniqueArray = (elements) => {
-  const getRandomUniqueIndex = uniqueIndex(0, elements.length - 1);
+const getUniqueArray = (elements) => {
+  const getRandomUniqueIndex = getUniqueIndex(0, elements.length - 1);
 
   return () => elements[getRandomUniqueIndex()];
 };
@@ -86,8 +86,8 @@ export {
   escapeKey,
   show,
   hide,
-  hidden,
+  isHidden,
   showErrorBlock,
   debounce,
-  uniqueArray,
+  getUniqueArray,
 };

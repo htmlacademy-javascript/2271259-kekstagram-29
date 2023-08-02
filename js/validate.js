@@ -1,10 +1,10 @@
-const hashtagPattern = /^#[a-zа-яё0-9]{1,19}$/i;
-const hashtagLimit = 5;
-const commentLimit = 140;
+const HASHTAG_PATTERN = /^#[a-zа-яё0-9]{1,19}$/i;
+const HASHTAG_LIMIT = 5;
+const COMMENT_LIMIT = 140;
 
 const onElementKeydown = (evt) => evt.stopPropagation();
 
-const pristineValidator = (form) => new Pristine(
+const createPristineValidator = (form) => new Pristine(
   form,
   {
     classTo: 'img-upload__field-wrapper',
@@ -18,10 +18,10 @@ const pristineValidator = (form) => new Pristine(
 
 const normalizeHashtags = (hashtagString) => hashtagString.trim().toLowerCase().split(/\s+/);
 
-const validHashtag = (hashtag) => hashtagPattern.test(hashtag);
+const getValidHashtag = (hashtag) => HASHTAG_PATTERN.test(hashtag);
 
 const validateHashtagCount = (hashtagString) =>
-  normalizeHashtags(hashtagString).length <= hashtagLimit;
+  normalizeHashtags(hashtagString).length <= HASHTAG_LIMIT;
 
 const validateHashtagUniqueness = (hashtagString) => {
   const normalizedHashtags = normalizeHashtags(hashtagString);
@@ -29,14 +29,14 @@ const validateHashtagUniqueness = (hashtagString) => {
 };
 
 const validateHashtagPattern = (hashtagString) =>
-  !hashtagString || normalizeHashtags(hashtagString).every(validHashtag);
+  !hashtagString || normalizeHashtags(hashtagString).every(getValidHashtag);
 
-const validateTextarea = ({ length }) => length <= commentLimit;
+const validateTextarea = ({ length }) => length <= COMMENT_LIMIT;
 
-const hashtagCountErrorMessage = () => 'Нельзя указать больше пяти хэш-тегов !';
-const hashtagUniqErrorMessage = () => 'Один и тот же хэш-тег не может быть использован дважды !';
-const hashtagPatternErrorMessage = () => 'Введён невалидный хэш-тег !';
-const textareaErrorMessage = () => 'Длина комментария не может составлять больше 140 символов !';
+const showHashtagCountErrorMessage = () => 'Нельзя указать больше пяти хэш-тегов !';
+const showHashtagUniqErrorMessage = () => 'Один и тот же хэш-тег не может быть использован дважды !';
+const showHashtagPatternErrorMessage = () => 'Введён невалидный хэш-тег !';
+const showTextareaErrorMessage = () => 'Длина комментария не может составлять больше 140 символов !';
 
 const stopKeydownEventPropagation = (...elements) => elements.forEach((element) =>
   element.addEventListener('keydown', onElementKeydown));
@@ -45,12 +45,12 @@ const createFormValidation = (form) => {
   const hashtagsInput = form.querySelector('.text__hashtags');
   const textarea = form.querySelector('.text__description');
 
-  const pristine = pristineValidator(form);
+  const pristine = createPristineValidator(form);
 
-  pristine.addValidator(hashtagsInput, validateHashtagCount, hashtagCountErrorMessage, 3, true);
-  pristine.addValidator(hashtagsInput, validateHashtagUniqueness, hashtagUniqErrorMessage, 2, true);
-  pristine.addValidator(hashtagsInput, validateHashtagPattern, hashtagPatternErrorMessage, 1);
-  pristine.addValidator(textarea, validateTextarea, textareaErrorMessage);
+  pristine.addValidator(hashtagsInput, validateHashtagCount, showHashtagCountErrorMessage, 3, true);
+  pristine.addValidator(hashtagsInput, validateHashtagUniqueness, showHashtagUniqErrorMessage, 2, true);
+  pristine.addValidator(hashtagsInput, validateHashtagPattern, showHashtagPatternErrorMessage, 1);
+  pristine.addValidator(textarea, validateTextarea, showTextareaErrorMessage);
 
   stopKeydownEventPropagation(hashtagsInput, textarea);
 
